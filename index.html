@@ -13,15 +13,16 @@
 			  font-family: GoodMood;
 			  src: url(good_mood.otf);
 			}
-
 			
 			.data {
-				margin: 0 auto;
+				top: 10%;
+				position: relative;
 				text-align: center;
 			}
 
 			.good-mood {
 				font-family: "GoodMood";
+				color: #e1a69e;
 			}
 
 			.tamil {
@@ -30,30 +31,116 @@
 
 			html,
 			body {
+				overflow-y: hidden;
 				font-family: "Tamil";
 				height: 100%;
 			}
 
 			body {
+				font-size: x-large;
 				background-image: url("amaranta_bg.png");
 				background-repeat: no-repeat;
 				background-size: cover;	
+			}
+
+			img.icons {
+				vertical-align: sub;
+				margin-left: 15px;
+			}
+
+			#snackbar {
+			  visibility: hidden; /* Hidden by default. Visible on click */
+			  min-width: 250px; /* Set a default minimum width */
+			  margin-left: -125px; /* Divide value of min-width by 2 */
+			  background-color: #333; /* Black background color */
+			  color: #fff; /* White text color */
+			  text-align: center; /* Centered text */
+			  border-radius: 2px; /* Rounded borders */
+			  padding: 16px; /* Padding */
+			  position: fixed; /* Sit on top of the screen */
+			  z-index: 1; /* Add a z-index if needed */
+			  left: 50%; /* Center the snackbar */
+			  bottom: 30px; /* 30px from the bottom */
+			}
+
+			/* Show the snackbar when clicking on a button (class added with JavaScript) */
+			#snackbar.show {
+			  visibility: visible; /* Show the snackbar */
+			  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+			  However, delay the fade out process for 2.5 seconds */
+			  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			}
+
+			/* Animations to fade the snackbar in and out */
+			@-webkit-keyframes fadein {
+			  from {bottom: 0; opacity: 0;}
+			  to {bottom: 30px; opacity: 1;}
+			}
+
+			@keyframes fadein {
+			  from {bottom: 0; opacity: 0;}
+			  to {bottom: 30px; opacity: 1;}
+			}
+
+			@-webkit-keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;}
+			  to {bottom: 0; opacity: 0;}
+			}
+
+			@keyframes fadeout {
+			  from {bottom: 30px; opacity: 1;}
+			  to {bottom: 0; opacity: 0;}
 			}
 
 		</style>
 	</head>
 	<body>
 		<div class="data">
-		   	<img src="amaranta_logo.png" height="100px" width="100px">
-			<h3 class="good-mood">Titular</h3>
-			<h4 class="good-mood">Vanessa Alejandra Urzua Alvarez</h4>
-			<p  class="good-mood">
-				<strong>BBVA</strong><br>
-				CLABE<br>
-				<span class="tamil"><strong>012180015302741892</strong></span> <img src="ic_copy.png" height="20px" width="20px"><br>
-				Numero de tarjeta<br>
-				<span class="tamil"><strong>4152313644811320</strong></span><img src="ic_copy.png" height="20px" width="20px">
-			</p>
+		   	<img src="amaranta_logo.png" height="150" width="150">
+			<h4>Vanessa Alejandra Urzua Alvarez</h4>
+			<p>BBVA</p>
+			<p><span class="good-mood">CLABE</span></br>
+			<span id="clabe">012180015302741892</span> <img class="icons copy-clabe-btn" src="ic_copy.png" height="30" width="30"></p>
+			<p><span class="good-mood">Numero de tarjeta</span></br>
+			<span id="card-number">4152313644811320</span><img class="icons copy-card-number-btn" src="ic_copy.png" height="30" width="30"></p>
 		  </div>
+			<div id="snackbar">Copiado!</div>
+		  <script>
+			var copyCalbeBtn = document.querySelector('.copy-clabe-btn');
+			copyCalbeBtn.addEventListener('click', function(event) {
+			  var clabeValue = document.querySelector('#clabe');
+			  copyToClipboard(clabeValue)
+			  
+			});
+
+			var copyCreditCardNumberBtn = document.querySelector('.copy-card-number-btn');
+			copyCreditCardNumberBtn.addEventListener('click', function(event) {
+			  var cardNumberValue = document.querySelector('#card-number');
+			  copyToClipboard(cardNumberValue)
+			  
+			});
+
+			function copyToClipboard(textToCopy) {
+				var range = document.createRange();
+				range.selectNode(textToCopy);
+				window.getSelection().addRange(range);
+
+				try {
+				var successful = document.execCommand('copy');
+				if(successful) showSnackbar()
+				} catch(err) {
+				console.log("No se pudo copiar el texto :(")
+				}
+
+				window.getSelection().removeAllRanges();
+			}
+
+			function showSnackbar() {
+			  var x = document.getElementById("snackbar");
+			  x.className = "show";
+			  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 1000);
+			}
+		</script>
 	</body>
 </html>
